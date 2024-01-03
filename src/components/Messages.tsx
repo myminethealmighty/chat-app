@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/util";
 import { Message } from "@/lib/validations/message";
+import { format } from "date-fns";
 import { FC, useRef, useState } from "react";
 
 interface MessageProps {
@@ -12,6 +13,10 @@ interface MessageProps {
 const Message: FC<MessageProps> = ({ initialMessages, sessionId }) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
+
+  const formatTimestamp = (timestamp: number) => {
+    return format(timestamp, "HH:mm");
+  };
   return (
     <div
       id="messages"
@@ -42,21 +47,30 @@ const Message: FC<MessageProps> = ({ initialMessages, sessionId }) => {
                   }
                 )}
               >
-                <span
-                  className={cn("px-4 py-2 rounded-lg inline-block", {
-                    "bg-indigo-600 text-white": isCurrentUser,
-                    "bg-gray-200 text-gray-900": !isCurrentUser,
-                    "rounded-br-none":
-                      !hasNextMessageFromSameUser && isCurrentUser,
-                    "rounded-bl-none":
-                      !hasNextMessageFromSameUser && !isCurrentUser,
-                  })}
-                >
-                  {message.text}{" "}
-                  {/* <span className="ml-2 text-xs text-gray-400">
-                    {formatTimestamp(message.timestamp)}
-                  </span> */}
-                </span>
+                <div className="flex items-center">
+                  {isCurrentUser && (
+                    <span className="mr-2 text-xs text-gray-400">
+                      {formatTimestamp(message.timestamp)}
+                    </span>
+                  )}
+                  <span
+                    className={cn("px-4 py-2 rounded-lg inline-block", {
+                      "bg-indigo-600 text-white": isCurrentUser,
+                      "bg-gray-200 text-gray-900": !isCurrentUser,
+                      "rounded-br-none":
+                        !hasNextMessageFromSameUser && isCurrentUser,
+                      "rounded-bl-none":
+                        !hasNextMessageFromSameUser && !isCurrentUser,
+                    })}
+                  >
+                    {message.text}
+                  </span>
+                  {!isCurrentUser && (
+                    <span className="ml-2 text-xs text-gray-400">
+                      {formatTimestamp(message.timestamp)}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div

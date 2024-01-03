@@ -16,6 +16,7 @@
     "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "date-fns": "^3.0.6",
     "lucide-react": "^0.301.0",
     "nanoid": "^5.0.4",
     "next": "14.0.4",
