@@ -34,19 +34,22 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      {
-        /* Save the first login account{Caching Behavior} 
+      /* Save the first login account{Caching Behavior} 
         const dbUser = (await db.get(`user:${token.id}`)) as User | null;
         */
-      }
+
       const dbUserResult = (await fetchReids("get", `user:${token.id}`)) as
         | string
         | null;
 
       if (!dbUserResult) {
-        token.id = user!.id;
+        if (user) {
+          token.id = user!.id;
+        }
+
         return token;
       }
+
       const dbUser = JSON.parse(dbUserResult) as User;
       return {
         id: dbUser.id,

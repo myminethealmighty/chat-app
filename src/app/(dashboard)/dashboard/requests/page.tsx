@@ -21,11 +21,11 @@ const page = async () => {
       }
 
       const sender = (await fetchReids("get", `user:${senderId}`)) as string;
-      const senderJson = JSON.parse(sender) as User;
+      const senderJSON = JSON.parse(sender) as User;
 
       return {
         senderId,
-        senderEmail: senderJson.email,
+        senderEmail: senderJSON.email,
       };
     })
   );
