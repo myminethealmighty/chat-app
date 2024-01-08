@@ -1,6 +1,8 @@
 import { fetchReids } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
+import { pusherKeyString } from "@/lib/util";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 
@@ -35,9 +37,16 @@ export const POST = async (req: Request) => {
       return new Response("No Request.", { status: 400 });
     }
 
-    // No need to fetch redish due to making POST request or modifying data that is not cached in NextJS
+    // Notify added user
+    pusherServer.trigger(
+      pusherKeyString(`user:${idToAdd}:friends`),
+      "new_friends",
+      ""
+    );
 
     //Add the user to the requester's friend list
+
+    // No need to fetch redish due to making POST request or modifying data that is not cached in NextJS
 
     await db.sadd(`user:${session.user.id}:friends`, idToAdd);
 
