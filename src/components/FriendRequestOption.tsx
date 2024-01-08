@@ -23,16 +23,25 @@ const FriendRequestOption: FC<FriendRequestOptionProps> = ({
       pusherKeyString(`user:${sessionId}:incoming_friend_requests`)
     );
 
+    pusherClient.subscribe(pusherKeyString(`user:${sessionId}:friends`));
+
     const friendRequestHandler = () => {
       setUnseenCount((prev) => prev + 1);
     };
 
+    const addedFriendHandler = () => {
+      setUnseenCount((prev) => prev - 1);
+    };
     pusherClient.bind("incoming_friend_requests", friendRequestHandler);
+    pusherClient.bind("new_friend", addedFriendHandler);
+
     return () => {
       pusherClient.unsubscribe(
         pusherKeyString(`user:${sessionId}:incoming_friend_requests`)
       );
+      pusherClient.unsubscribe(pusherKeyString(`user:${sessionId}:friends`));
       pusherClient.unbind("incoming_friend_requests", friendRequestHandler);
+      pusherClient.unbind("new_friend", addedFriendHandler);
     };
   }, [sessionId]);
 

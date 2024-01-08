@@ -37,24 +37,41 @@ export const POST = async (req: Request) => {
       return new Response("No Request.", { status: 400 });
     }
 
+    const [stringUser, stringFriend] = (await Promise.all([
+      fetchReids("get", `user:${session.user.id}`),
+      fetchReids("get", `user:${idToAdd}`),
+    ])) as [string, string];
+
+    const user = JSON.parse(stringUser) as User;
+    const friend = JSON.parse(stringFriend) as User;
+
     // Notify added user
-    pusherServer.trigger(
-      pusherKeyString(`user:${idToAdd}:friends`),
-      "new_friends",
-      ""
-    );
+    await Promise.all([
+      pusherServer.trigger(
+        pusherKeyString(`user:${idToAdd}:friends`),
+        "new_friend",
+        user
+      ),
+      pusherServer.trigger(
+        pusherKeyString(`user:${session.user.id}:friends`),
+        "new_friend",
+        friend
+      ),
+      //Add the user to the requester's friend list
 
-    //Add the user to the requester's friend list
+      // No need to fetch redish due to making POST request or modifying data that is not cached in NextJS
 
-    // No need to fetch redish due to making POST request or modifying data that is not cached in NextJS
+      await db.sadd(`user:${session.user.id}:friends`, idToAdd),
 
-    await db.sadd(`user:${session.user.id}:friends`, idToAdd);
+      await db.sadd(`user:${idToAdd}:friends`, session.user.id),
 
-    await db.sadd(`user:${idToAdd}:friends`, session.user.id);
+      //Clean the friend request
 
-    //Clean the friend request
-
-    await db.srem(`user:${session.user.id}:incoming_friend_requests`, idToAdd);
+      await db.srem(
+        `user:${session.user.id}:incoming_friend_requests`,
+        idToAdd
+      ),
+    ]);
 
     return new Response("Ok");
   } catch (error) {
