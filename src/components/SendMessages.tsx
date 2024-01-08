@@ -18,6 +18,7 @@ const SendMessages: FC<SendMessagesProps> = ({ chatFriend, chatId }) => {
   const [input, setInput] = useState<string>("");
 
   const sendMessages = async () => {
+    if (!input) return;
     setIsLoading(true);
     try {
       await axios.post("/api/message/send", { text: input, chatId });

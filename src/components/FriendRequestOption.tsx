@@ -1,8 +1,10 @@
 "use client";
 
+import { pusherClient } from "@/lib/pusher";
+import { pusherKeyString } from "@/lib/util";
 import { User } from "lucide-react";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 interface FriendRequestOptionProps {
   initialCount: number;
@@ -14,6 +16,26 @@ const FriendRequestOption: FC<FriendRequestOptionProps> = ({
   sessionId,
 }) => {
   const [unseenCount, setUnseenCount] = useState<number>(initialCount);
+
+  useEffect(() => {
+    // Subscribe name cannot contain ":"
+    pusherClient.subscribe(
+      pusherKeyString(`user:${sessionId}:incoming_friend_requests`)
+    );
+
+    const friendRequestHandler = () => {
+      setUnseenCount((prev) => prev + 1);
+    };
+
+    pusherClient.bind("incoming_friend_requests", friendRequestHandler);
+    return () => {
+      pusherClient.unsubscribe(
+        pusherKeyString(`user:${sessionId}:incoming_friend_requests`)
+      );
+      pusherClient.unbind("incoming_friend_requests", friendRequestHandler);
+    };
+  }, []);
+
   return (
     <Link
       href="/dashboard/requests"

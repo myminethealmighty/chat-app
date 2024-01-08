@@ -1,6 +1,7 @@
 "use client";
 
-import { createChatHref } from "@/lib/util";
+import { pusherClient } from "@/lib/pusher";
+import { createChatHref, pusherKeyString } from "@/lib/util";
 import { usePathname, useRouter } from "next/navigation";
 
 import { FC, useEffect, useState } from "react";
@@ -22,6 +23,27 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ sessionId, friends }) => {
       });
     }
   }, [pathname]);
+
+  useEffect(() => {
+    pusherClient.subscribe(pusherKeyString(`user:${sessionId}:chats`));
+    pusherClient.subscribe(pusherKeyString(`user:${sessionId}:friends`));
+
+    const messageHandler = () => {
+      console.log("New Messages");
+    };
+
+    const friendHandler = () => {
+      router.refresh();
+    };
+
+    pusherClient.bind("new_messages", messageHandler);
+    pusherClient.bind("new_friends", friendHandler);
+
+    return () => {
+      pusherClient.unsubscribe(pusherKeyString(`user:${sessionId}:chats`));
+      pusherClient.unsubscribe(pusherKeyString(`user:${sessionId}:friends`));
+    };
+  }, []);
 
   return (
     <ul role="list" className="max-h- [25rem] overflow-y-auto -mx-2 space-y-1">

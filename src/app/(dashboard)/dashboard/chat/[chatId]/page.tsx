@@ -2,7 +2,6 @@ import Messages from "@/components/Messages";
 import SendMessages from "@/components/SendMessages";
 import { fetchReids } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
-import { db } from "@/lib/db";
 import { messageArrayValidator } from "@/lib/validations/message";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -53,7 +52,12 @@ const page = async ({ params }: PageProps) => {
   const chatFriendId = user.id === userId1 ? userId2 : userId1;
 
   // No caching issue, so use db.get instead of fetchRedis
-  const chatFriend = (await db.get(`user:${chatFriendId}`)) as User;
+  const chatFriendString = (await fetchReids(
+    "get",
+    `user:${chatFriendId}`
+  )) as string;
+  const chatFriend = JSON.parse(chatFriendString) as User;
+
   const initialMessages = await getChatMessages(chatId);
 
   return (
@@ -86,7 +90,7 @@ const page = async ({ params }: PageProps) => {
 
       <Messages
         chatId={chatId}
-        chatPartner={chatFriend}
+        chatFriend={chatFriend}
         sessionImg={session.user.image}
         sessionId={session.user.id}
         initialMessages={initialMessages}
