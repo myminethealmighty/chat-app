@@ -47,7 +47,7 @@ const MobileLayout: FC<MobileLayoutProps> = ({
           href="/dashboard"
           className={buttonVariants({ variant: "ghost" })}
         >
-          <Icons.Logo className="h-6 w-auto text-indigo-600" />
+          <Icons.Logo className="h-6 w-auto text-emerald-600" />
         </Link>
         <Button onClick={() => setOpen(true)} className="gap-4">
           Menu <Menu className="h-6 w-6" />
@@ -79,7 +79,7 @@ const MobileLayout: FC<MobileLayoutProps> = ({
                           <div className="ml-3 flex h-7 items-center">
                             <button
                               type="button"
-                              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                               onClick={() => setOpen(false)}
                             >
                               <span className="sr-only">Close panel</span>
@@ -120,9 +120,9 @@ const MobileLayout: FC<MobileLayoutProps> = ({
                                     <li key={option.name}>
                                       <Link
                                         href={option.href}
-                                        className="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                        className="text-gray-700 hover:text-emerald-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                       >
-                                        <span className="text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
+                                        <span className="text-gray-400 border-gray-200 group-hover:border-emerald-600 group-hover:text-emerald-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
                                           <Icon className="h-4 w-4" />
                                         </span>
                                         <span className="truncate">

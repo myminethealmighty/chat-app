@@ -58,7 +58,7 @@ const ToastNoti: FC<ToastNotiProps> = ({
       <div className="flex border-l border-gray-200">
         <button
           onClick={() => toast.dismiss(toastNoti.id)}
-          className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-emerald-600 hover:text-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
           Close
         </button>

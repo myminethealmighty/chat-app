@@ -79,7 +79,7 @@ const FriendRequests: FC<FriendRequestsProps> = ({
             <button
               onClick={() => acceptFriend(request.senderId)}
               aria-label="Accept"
-              className="w-8 h-8 bg-indigo-600 hover:bg-indigo-700 grid place-items-center rounded-full transition hover:shadow-md"
+              className="w-8 h-8 bg-emerald-600 hover:bg-emerald-700 grid place-items-center rounded-full transition hover:shadow-md"
             >
               <Check className="font-semibold text-white w-3/4 h-3/4" />
             </button>
