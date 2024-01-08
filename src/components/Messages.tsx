@@ -38,7 +38,8 @@ const Message: FC<MessageProps> = ({
       pusherClient.unsubscribe(pusherKeyString(`chat:${chatId}`));
       pusherClient.unbind("incoming_messages", messageHandler);
     };
-  }, []);
+    // Everything Come from outside useEffect should be dependencies
+  }, [chatId]);
 
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
 
